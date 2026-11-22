@@ -1,0 +1,169 @@
+<!doctype html><html lang="ht"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123b35"><title>SOLAR DESIGN PRO</title><link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--g:#126b50;--d:#123b35;--bg:#f2f6f4;--ink:#172522;--muted:#61716c;--line:#dce5e1;--red:#b42318;--amber:#9a6700}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,Arial,sans-serif}header{background:linear-gradient(130deg,#123b35,#16795a);color:#fff;padding:20px 16px}header h1{margin:0;font-size:23px}header p{margin:5px 0 0;color:#d7eee5;font-size:13px}main{max-width:980px;margin:auto;padding:13px}.tabs{display:flex;gap:6px;overflow:auto;padding:5px 0 12px}.tabs button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:22px;padding:9px 12px}.tabs button.active{background:var(--d);color:#fff}section{display:none}section.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:12px}h2{font-size:18px;margin:0 0 11px}h3{font-size:15px;margin:14px 0 8px}.help,.muted{font-size:12px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}input,select{width:100%;min-width:0;padding:10px;border:1px solid #cbd8d2;border-radius:9px;background:#fff;color:var(--ink);font:inherit}button{font:inherit;cursor:pointer}.primary{background:var(--g);color:#fff;border:0;border-radius:10px;padding:12px 15px;font-weight:700}.secondary{background:#eaf3ef;color:var(--d);border:1px solid #cbded4;border-radius:9px;padding:9px 12px}.danger{background:#fff0ef;color:var(--red);border:1px solid #f3c5c1;border-radius:9px;padding:7px 10px}.row{display:flex;align-items:center;justify-content:space-between;gap:9px}.device{border:1px solid var(--line);border-radius:11px;padding:11px;margin:9px 0}.dg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:7px}.wide{grid-column:span 2}.notice{border-left:4px solid #d49b24;background:#fff8e7;padding:10px 12px;border-radius:7px;font-size:13px;margin:10px 0}.good{border-left-color:#16845e;background:#eef8f3}.bad{border-left-color:var(--red);background:#fff0ef}.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.kpi{background:#edf5f1;border-radius:11px;padding:12px}.kpi small{display:block;color:var(--muted)}.kpi b{font-size:20px;color:var(--d)}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:8px 5px;border-bottom:1px solid var(--line)}th{color:var(--muted)}.result{white-space:pre-wrap;line-height:1.55;font-size:13px}.full{width:100%}.footer{text-align:center;color:var(--muted);font-size:11px;padding:15px}.hidden{display:none}
+@media(max-width:580px){.grid,.grid3{grid-template-columns:1fr 1fr}.dg{grid-template-columns:1fr 1fr}.wide{grid-column:span 2}}
+@media print{header,.tabs,.no-print{display:none!important}body{background:#fff}.card{break-inside:avoid;border:0}.result{font-size:11px}}
+</style></head><body>
+<header><h1>☀ SOLAR DESIGN PRO</h1><p>Dimensionnement solaire • Kreyòl ayisyen • Edisyon konplè kalkilatris</p></header>
+<main>
+<nav class="tabs" id="tabs">
+<button class="active" data-tab="loads">1. Aparèy</button><button data-tab="conditions">2. Kondisyon</button><button data-tab="battery">3. Batri</button><button data-tab="pv">4. Pano/MPPT</button><button data-tab="inverter">5. Inverter</button><button data-tab="cables">6. Kab</button><button data-tab="report">7. Rapò</button>
+</nav>
+<section id="loads" class="active"><div class="card"><h2>1. Antre aparèy yo</h2><p class="help">Antre done etikèt oswa mezi. Pou frijidè, ponp, klima: Wh/jou mezire pi bon pase W × lè. Antre pik demaraj W dapre fich teknik/mezi pou motè.</p><div id="devices"></div><button class="secondary no-print" id="add">＋ Ajoute aparèy</button><div class="notice">Si ou pa konnen Wh/jou yon frijidè, mezire li ak wattmèt/energy meter pandan 24–72 èdtan. Pa konsidere watt nominal la kòm konsomasyon kontinyèl.</div></div></section>
+<section id="conditions"><div class="card"><h2>2. Paramèt konsepsyon</h2><div class="grid">
+<div><label>Jou otonomi</label><input id="autonomy" type="number" min=".5" step=".5" placeholder="Eg. 1"></div>
+<div><label>HSP minimòm sezon difisil (h/jou)</label><input id="hsp" type="number" min=".1" step=".1" placeholder="Done solè lokal"></div>
+<div><label>Pèt total PV (%, tanperati, pousyè, kab, elatriye)</label><input id="loss" type="number" min="0" max="60" placeholder="Baze sou konsepsyon"></div>
+<div><label>Rendman inverter (%)</label><input id="invEff" type="number" min="50" max="100" placeholder="Fich inverter"></div>
+<div><label>Rendman batri (%)</label><input id="batEff" type="number" min="50" max="100" placeholder="Fich batri"></div>
+<div><label>Similtaneite chaj (%)</label><input id="simul" type="number" min="1" max="100" value="100"></div>
+<div><label>Marge konsepsyon inverter (eg. 1.25)</label><input id="invMargin" type="number" min="1" max="2" step=".05" value="1.25"></div>
+</div><p class="help">HSP dwe koresponn ak kote enstalasyon an ak mwa ki pi fèb la. Pèt ak efikasite yo dwe sòti nan done ekipman oswa ipotèz konsepsyon ou ka esplike.</p></div></section>
+<section id="battery"><div class="card"><h2>3. Batri — aplikasyon an fè dimansyonman</h2><div class="grid">
+<div><label>Chimi batri</label><select id="chem"><option value="">Chwazi</option><option value="lead">Plon-asid / AGM / GEL</option><option value="lithium">LiFePO₄</option></select></div>
+<div><label>DoD otorize manifakti (%)</label><input id="dod" type="number" min="1" max="100" placeholder="Fich teknik"></div>
+<div><label>Modil batri vòltaj (V), si modèl deja chwazi</label><select id="moduleV"><option value="">Pa chwazi</option><option>6</option><option>12</option><option>24</option><option>48</option></select></div>
+<div><label>Modil batri kapasite (Ah), si deja chwazi</label><input id="moduleAh" type="number" min="1" placeholder="Etikèt batri"></div>
+<div><label>Max kouran chaj modil (A)</label><input id="batChargeA" type="number" min="0" placeholder="BMS/manifakti"></div>
+<div><label>Max kouran dechaj modil (A)</label><input id="batDisA" type="number" min="0" placeholder="BMS/manifakti"></div>
+</div><div id="batteryResult" class="notice">Aplikasyon an ap sijere bank lan apre ou antre chaj yo ak paramèt konsepsyon yo.</div></div></section>
+<section id="pv"><div class="card"><h2>4. Pano ak MPPT</h2><p class="help">Pou validasyon string, antre tout done sou etikèt pano ak fich MPPT la. Voc dwe korije pou tanperati minimòm sit la.</p><div class="grid">
+<div><label>Pouvwa pano (Wp)</label><input id="panelW" type="number" min="1" placeholder="Etikèt pano"></div><div><label>Voc STC (V)</label><input id="voc" type="number" min=".1" placeholder="Etikèt pano"></div>
+<div><label>Vmp STC (V)</label><input id="vmp" type="number" min=".1" placeholder="Etikèt pano"></div><div><label>Isc (A)</label><input id="isc" type="number" min=".1" placeholder="Etikèt pano"></div>
+<div><label>Imp (A)</label><input id="imp" type="number" min=".1" placeholder="Etikèt pano"></div><div><label>Koefisyan Voc (%/°C, valè absoli)</label><input id="vocCoeff" type="number" min=".01" step=".01" placeholder="Eg. 0.28"></div>
+<div><label>Tanperati minimòm konsepsyon (°C)</label><input id="minTemp" type="number" placeholder="Done lokal"></div><div><label>MPPT max Voc (V)</label><input id="mpptVoc" type="number" min="1" placeholder="Fich MPPT"></div>
+<div><label>MPPT Vmp minimòm (V)</label><input id="mpptMin" type="number" min="1" placeholder="Fich MPPT"></div><div><label>MPPT Vmp maksimòm (V), si genyen</label><input id="mpptMax" type="number" min="0" placeholder="Fich MPPT"></div>
+<div><label>MPPT max PV Isc (A)</label><input id="mpptIsc" type="number" min="1" placeholder="Fich MPPT"></div><div><label>MPPT max chaj batri (A)</label><input id="mpptCharge" type="number" min="1" placeholder="Fich MPPT"></div>
+<div><label>MPPT max PV power (W)</label><input id="mpptPower" type="number" min="1" placeholder="Fich MPPT"></div>
+</div><div id="pvResult" class="notice">Kantite pano Wp ap kalkile. Seri/paralèl ap valide sèlman lè tout done MPPT yo disponib.</div></div></section>
+<section id="inverter"><div class="card"><h2>5. Inverter</h2><div class="grid">
+<div><label>Modèl/vòltaj DC inverter (si deja chwazi)</label><select id="invV"><option value="">Aplikasyon an sijere</option><option>12</option><option>24</option><option>48</option></select></div>
+<div><label>Pouvwa kontinyèl inverter (W), si ou gen modèl</label><input id="invRated" type="number" min="1" placeholder="Fich teknik"></div>
+<div><label>Pouvwa surge (W)</label><input id="invSurge" type="number" min="1" placeholder="Fich teknik"></div>
+<div><label>Rendman inverter (%)</label><input id="invEff2" type="number" min="50" max="100" placeholder="Si diferan, ranplase valè anlè"></div>
+</div><div id="inverterResult" class="notice">Aplikasyon an ap sijere pouvwa kontinyèl ak vòltaj DC. Pik demaraj dwe soti nan done reyèl.</div></div></section>
+<section id="cables"><div class="card"><h2>6. Estimasyon seksyon kab pa chòk vòltaj</h2><div class="grid">
+<div><label>Materyèl kondiktè</label><select id="metal"><option value="copper">Kwiv</option><option value="aluminum">Aliminyòm</option></select></div>
+<div><label>Longè yon sèl sans (m)</label><input id="length" type="number" min=".1" placeholder="Mezire distans"></div>
+<div><label>Kouran konsepsyon (A)</label><input id="cableA" type="number" min=".1" placeholder="Soti nan konsepsyon"></div>
+<div><label>Vòltaj sikwi (V)</label><input id="cableV" type="number" min="1" placeholder="12 / 24 / 48 / PV"></div>
+<div><label>Chòk vòltaj maksimòm (%)</label><input id="dropPct" type="number" min=".1" max="5" step=".1" value="2"></div>
+</div><button class="secondary no-print" id="cableCalc" style="margin-top:10px">Kalkile seksyon pou chòk vòltaj</button><div id="cableResult" class="notice">Sa se sèlman seksyon minimòm teyorik pou chòk vòltaj. Li pa valide kapasite tèmik/ampasite kab.</div></div>
+<div class="card"><h3>Pwoteksyon elektrik</h3><p class="help">Aplikasyon an pa bay ampè final pou fusible/disjoncteur san fich ekipman, kouran kout-sikwi, kapasite entèripsyon, kantite string, kondisyon tanperati ak estanda lokal. Chwazi pwoteksyon dapre manyèl manifakti ak verifikasyon teknisyen kalifye.</p></div></section>
+<section id="report"><div class="card"><h2>7. Rapò final kalkil</h2><button class="primary full no-print" id="calc">KALKILE TOUT SISTÈM NAN</button><div id="reportText" class="result" style="margin-top:13px">Antre done yo nan chak seksyon, epi kalkile.</div><button class="secondary full no-print" id="print" style="margin-top:10px">Enprime / Sove an PDF</button></div>
+<div class="card"><h3>Avètisman sekirite</h3><p class="help">Rezilta yo se dimansyonman preliminè ki depann de presizyon antre yo. Pa ranplase kalkil kout-sikwi, ampacity/derating, pwoteksyon, tè, polarite, seleksyon konektè, ak règleman elektrik. Fè yon teknisyen kalifye verifye tout plan avan koneksyon.</p></div></section>
+<div class="footer">SOLAR DESIGN PRO • Kalkil transparan • Done reyèl obligatwa</div></main>
+<script>
+const $=id=>document.getElementById(id), raw=id=>$(id).value.trim(), n=id=>raw(id)===''?NaN:Number(raw(id)), F=(x,d=1)=>Number.isFinite(x)?x.toLocaleString('fr-FR',{maximumFractionDigits:d}):'—';
+let devices=[],seq=1,lastReport='';
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function add(x={}){devices.push({id:seq++,name:x.name||'',qty:x.qty??1,w:x.w??'',hours:x.hours??'',wh:x.wh??'',surge:x.surge??'',motor:x.motor??false});draw()}
+function draw(){$('devices').innerHTML='';devices.forEach((d,i)=>{let e=document.createElement('div');e.className='device';e.innerHTML=`<div class="row"><b>Aparèy ${i+1}</b><button class="danger" data-del="${d.id}">Retire</button></div><div class="dg">
+<div class="wide"><label>Non aparèy</label><input data-id="${d.id}" data-k="name" value="${esc(d.name)}" placeholder="Eg. Frijidè"></div>
+<div><label>Kantite</label><input data-id="${d.id}" data-k="qty" type="number" min="1" value="${d.qty}"></div>
+<div><label>Pouvwa (W)</label><input data-id="${d.id}" data-k="w" type="number" min="0" step=".1" value="${d.w}" placeholder="Etikèt"></div>
+<div><label>Èdtan/jou</label><input data-id="${d.id}" data-k="hours" type="number" min="0" max="24" step=".1" value="${d.hours}" placeholder="0–24"></div>
+<div><label>Wh/jou mezire</label><input data-id="${d.id}" data-k="wh" type="number" min="0" value="${d.wh}" placeholder="Opsyonèl"></div>
+<div><label>Pik demaraj W</label><input data-id="${d.id}" data-k="surge" type="number" min="0" value="${d.surge}" placeholder="Motè"></div>
+<div><label>Motè?</label><select data-id="${d.id}" data-k="motor"><option value="false" ${!d.motor?'selected':''}>Non</option><option value="true" ${d.motor?'selected':''}>Wi</option></select></div></div><p class="help">Wh/jou mezire pran priyorite pou enèji. Sinon W × èdtan se yon estimasyon. Pou motè, pik demaraj nesesè pou verifye inverter.</p>`;$('devices').appendChild(e)})}
+$('devices').addEventListener('input',upd);$('devices').addEventListener('change',upd);
+function upd(e){let id=+e.target.dataset.id,k=e.target.dataset.k;if(!id||!k)return;let d=devices.find(z=>z.id===id);if(d)d[k]=k==='name'?e.target.value:k==='motor'?e.target.value==='true':e.target.value===''?'':Number(e.target.value)}
+$('devices').addEventListener('click',e=>{let id=+e.target.dataset.del;if(id){devices=devices.filter(d=>d.id!==id);draw()}});
+$('add').onclick=()=>add();
+$('tabs').onclick=e=>{let b=e.target.closest('[data-tab]');if(!b)return;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('main section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab))};
+function calculate(){
+ let errors=[],warnings=[],daily=0,runW=0,peakW=0;
+ if(!devices.length)errors.push('Ajoute omwen yon aparèy.');
+ devices.forEach((d,i)=>{
+  if(!d.name||!(Number(d.qty)>=1)||!(Number(d.w)>0)||!(Number(d.hours)>=0&&Number(d.hours)<=24))errors.push(`Ranpli non, kantite, Watt ak èdtan pou aparèy ${i+1}.`);
+  if(d.wh!==''&&!(Number(d.wh)>=0))errors.push(`Wh/jou pa valab pou ${d.name}.`);
+  if(d.motor&&!(Number(d.surge)>0))warnings.push(`Pik demaraj pou ${d.name} pa antre; kapasite surge inverter la pa verifye.`);
+  daily+=(d.wh!==''?Number(d.wh):Number(d.w)*Number(d.hours))*Number(d.qty||0);
+  runW+=Number(d.w||0)*Number(d.qty||0);
+  peakW+=(d.surge!==''?Number(d.surge):Number(d.w||0))*Number(d.qty||0);
+ });
+ const auto=n('autonomy'),hsp=n('hsp'),loss=n('loss')/100,invEff=(Number.isFinite(n('invEff2'))?n('invEff2'):n('invEff'))/100,batEff=n('batEff')/100,dod=n('dod')/100;
+ if(!(auto>0))errors.push('Antre jou otonomi.');
+ if(!(hsp>0))errors.push('Antre HSP minimòm verifye pou sit la.');
+ if(!(loss>=0&&loss<.8))errors.push('Antre pèt PV ant 0 ak 79%.');
+ if(!(invEff>0&&invEff<=1))errors.push('Antre efikasite inverter.');
+ if(!(batEff>0&&batEff<=1))errors.push('Antre efikasite batri.');
+ if(!(dod>0&&dod<=1))errors.push('Antre DoD dapre fich teknik batri.');
+ if(errors.length){$('reportText').textContent='KALKIL BLOKE:\n• '+errors.join('\n• ');return}
+ const dcWh=daily/invEff,battWh=dcWh*auto/(dod*batEff),pvWp=dcWh/(hsp*(1-loss));
+ const simult=runW*n('simul')/100,invMin=simult*n('invMargin');
+ let sugV=invMin<=1000?12:invMin<=3000?24:48;
+ let sysV=Number.isFinite(n('invV'))?n('invV'):sugV;
+ if(sysV!==sugV)warnings.push(`Vòltaj chwazi ${sysV} V diferan de sijesyon preliminè ${sugV} V; verifye kouran DC ak manifakti.`);
+ let battLine='Kantite modil pa kalkile: antre vòltaj ak Ah batri ou vle itilize a.';
+ if(n('moduleV')>0&&n('moduleAh')>0){
+  let s=sysV/n('moduleV'),p=Math.ceil((battWh/sysV)/n('moduleAh'));
+  if(!Number.isInteger(s)||s<1)warnings.push('Vòltaj modil batri pa bay seri antye pou sistèm nan.');
+  else battLine=`Konfigirasyon matematik: ${s} an seri × ${p} paralèl = ${s*p} modil. Verifye BMS/manifakti otorize kantite seri ak paralèl sa a.`;
+ }
+ const chargeNeed=battWh/sysV; // Ah bank
+ if(n('batDisA')>0&&n('batDisA')*((n('moduleV')>0&&n('moduleAh')>0)?Math.ceil(chargeNeed/n('moduleAh')):1)<invMin/(sysV*invEff))warnings.push('Kouran dechaj modil/BMS ka ensifizan pou inverter estime a; verifye konfigirasyon bank.');
+ const panelCount=Number.isFinite(n('panelW'))&&n('panelW')>0?Math.ceil(pvWp/n('panelW')):NaN;
+ let string='Pa valide: antre tout done pano ak MPPT.';
+ const req=['panelW','voc','vmp','isc','imp','vocCoeff','minTemp','mpptVoc','mpptMin','mpptIsc','mpptCharge','mpptPower'];
+ if(req.every(k=>Number.isFinite(n(k))&&n(k)>0) && Number.isFinite(panelCount)){
+  const coldVoc=n('voc')*(1+(n('vocCoeff')/100)*Math.max(0,25-n('minTemp')));
+  let options=[];
+  for(let s=1;s<=Math.min(50,Math.floor(n('mpptVoc')/coldVoc));s++){
+   const vocS=s*coldVoc,vmpS=s*n('vmp');
+   if(vocS>n('mpptVoc')||vmpS<n('mpptMin')||(n('mpptMax')>0&&vmpS>n('mpptMax')))continue;
+   for(let p=1;p<=50;p++){
+    let count=s*p,power=count*n('panelW'),arrayIsc=p*n('isc'),chargeA=power/sysV;
+    if(count>=panelCount&&power<=n('mpptPower')&&arrayIsc<=n('mpptIsc')&&chargeA<=n('mpptCharge'))options.push({s,p,count,power,vocS,vmpS,arrayIsc,chargeA});
+   }
+  }
+  options.sort((a,b)=>a.count-b.count||a.power-b.power);
+  if(options.length){let o=options[0];string=`String ki pase limit antre yo: ${o.s} pano seri × ${o.p} branch paralèl = ${o.count} pano (${F(o.power,0)} Wp). Voc frèt estime ${F(o.vocS,1)} V; Vmp string ${F(o.vmpS,1)} V; Isc array ${F(o.arrayIsc,1)} A; kouran chaj estime ${F(o.chargeA,1)} A.`}
+  else{string='PA GEN KONFIGIRASYON KI PASE LIMIT MPPT YO. Pa konekte array la.';warnings.push('Pa jwenn okenn string PV ki respekte limit MPPT antre yo.')}
+ }else warnings.push('Done pano/MPPT yo pa konplè: kantite pano se minimòm teyorik sèlman; string pa valide.');
+ const invRated=Number.isFinite(n('invRated'))?n('invRated'):invMin,invSurge=Number.isFinite(n('invSurge'))?n('invSurge'):NaN;
+ if(invRated<invMin)warnings.push('Pouvwa kontinyèl inverter ou chwazi a pi ba pase minimòm kalkile.');
+ if(Number.isFinite(invSurge)&&invSurge<peakW)warnings.push('Surge inverter antre a pi ba pase pik total aparèy yo.');
+ if(devices.some(d=>d.motor&&!(Number(d.surge)>0)))warnings.push('Pik demaraj pa antre pou youn oswa plizyè motè; inverter pa ka valide.');
+ $('batteryResult').textContent=`Enèji nominal bank estime: ${F(battWh/1000,2)} kWh. Kapasite Ah estime: ${F(battWh/sysV,1)} Ah @ ${sysV} V. ${battLine}`;
+ $('pvResult').textContent=`Pouvwa PV kalkile: ${F(pvWp,0)} Wp; kantite minimòm teyorik: ${Number.isFinite(panelCount)?panelCount:'—'}. ${string}`;
+ $('inverterResult').textContent=`Pouvwa kontinyèl minimòm preliminè: ${F(invMin,0)} W. Pik aparèy antre: ${F(peakW,0)} W. Vòltaj DC sijere: ${sugV} V. Konfime surge ak dire li nan fich inverter.`;
+ const lines=[
+ 'RAPÒ SOLAR DESIGN PRO — DIMANSYONMAN PRELIMINÈ',
+ `Konsomasyon chak jou: ${F(daily/1000,2)} kWh (${F(daily,0)} Wh).`,
+ `Pouvwa nominal aparèy ansanm: ${F(runW,0)} W; pouvwa simultane aplike: ${F(simult,0)} W.`,
+ `Pik demaraj total antre: ${F(peakW,0)} W (sipoze tout pik yo ka rive ansanm).`,
+ `BATRI: ${F(battWh/1000,2)} kWh nominal estime; ${F(battWh/sysV,1)} Ah @ ${sysV} V.`,
+ battLine,
+ `PANO: ${F(pvWp,0)} Wp; kantite minimòm teorik ${Number.isFinite(panelCount)?panelCount:'pa ka kalkile san Wp pano'}.`,
+ string,
+ `INVERTER: minimòm kontinyèl preliminè ${F(invMin,0)} W; vòltaj sijere ${sugV} V.`,
+ '',
+ 'FÒMIL:',
+ 'Wh/jou = Σ(W × èdtan × kantite), oswa Wh/jou mezire × kantite.',
+ 'Enèji DC = enèji AC ÷ rendman inverter.',
+ 'Batri nominal Wh = enèji DC × otonomi ÷ (DoD × rendman batri).',
+ 'Pano Wp = enèji DC ÷ [HSP × (1 − pèt PV)].',
+ 'Pano minimòm = plafon(Wp nesesè ÷ Wp chak pano).',
+ '',
+ 'AVÈTISMAN:',
+ ...warnings.map(w=>'• '+w),
+ '• Voc frèt la itilize koefisyan Voc ak tanperati minimòm antre; verifye metòd manifakti a ak kondisyon lokal yo.',
+ '• Chòk vòltaj kab se yon kalkil apa; seksyon final dwe pase ampacity, tanperati, gwoupman, kout-sikwi ak estanda.',
+ '• Pa sèvi ak rapò sa a kòm otorizasyon pou enstale. Fè yon teknisyen kalifye verifye tout konsepsyon ak done yo.'
+ ];
+ lastReport=lines.join('\n');$('reportText').textContent=lastReport;
+}
+function cableCalc(){
+ const L=n('length'),I=n('cableA'),V=n('cableV'),pct=n('dropPct'),rho=raw('metal')==='aluminum'?.0282:.0175;
+ if(!(L>0&&I>0&&V>0&&pct>0&&pct<=5)){$('cableResult').textContent='Antre longè, kouran, vòltaj ak limit chòk vòltaj ki valab.';return}
+ const area=2*L*I*rho/(V*pct/100),standard=[1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240],next=standard.find(a=>a>=area)||null;
+ $('cableResult').textContent=`Seksyon teyorik minimòm pou chòk vòltaj: ${F(area,2)} mm². Pwochen seksyon estanda nan lis la: ${next?next+' mm²':'pi wo pase 240 mm²'}. Rezistivite itilize: ${rho} Ω·mm²/m (apwoksimasyon 20°C). Sa PA verifye ampacity, tanperati, fason kab pase, gwoupman, pwoteksyon oswa kout-sikwi; pa chwazi kab final sou rezilta sa a sèlman.`;
+}
+$('calc').onclick=calculate;$('print').onclick=()=>{if(!lastReport)calculate();window.print()};$('cableCalc').onclick=cableCalc;
+add({name:'Aparèy egzanp — ranplase',qty:1});
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
